@@ -58,7 +58,7 @@ export const login = async (req, res, next) => {
     }
 
     // password field select:false hai, isliye +password
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    const user = await User.findOne({ email: email.toLowerCase() })
     if (!user) throw new ApiError(401, "Invalid email or password");
 
     // Compare in controller
