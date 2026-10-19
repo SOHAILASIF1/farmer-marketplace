@@ -2,7 +2,7 @@ import "dotenv/config"
 import express from 'express'
 import { connectDB } from "./config/db.js"
 
-console.log("URI:", process.env.MONGO_URI);
+console.log("URI:", process.env.MONGODB_URI);
 
 
 
