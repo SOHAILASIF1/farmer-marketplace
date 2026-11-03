@@ -60,6 +60,8 @@ export const login = async (req, res, next) => {
     // password field select:false hai, isliye +password
     const user = await User.findOne({ email: email.toLowerCase() })
     if (!user) throw new ApiError(401, "Invalid email or password");
+    console.log(user);
+    
 
     // Compare in controller
     const match = await bcrypt.compare(password, user.password);
@@ -94,3 +96,22 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+export const profile=async(req,res,next)=>{
+  try {
+    res.status(200).json({
+      success:true,
+      user:{
+        id:req.user._id,
+        name:req.user.name,
+        email:req.user.email,
+        role:req.user.role,
+        phone:req.user.phone,
+        city:req.user.city
+      }
+    })
+    
+  } catch (error) {
+    next(error)
+    
+  }
+}

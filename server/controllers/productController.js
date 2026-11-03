@@ -1,0 +1,28 @@
+import productModel from "../model/productModel.js";
+import { ApiError } from "../utils/ApiError.js";
+export const createProductSeller=async(req,res,next)=>{
+    try {
+        
+        const {title,crop,quantity,unit,price,city,quality,description}=req.body
+        if (!title||!crop ||!quantity||!price||!city) {
+            throw new ApiError(400,"Title,crop,quantity,price and city are required")
+            
+        }
+        const product=await productModel.create({
+            seller:req.user._id,
+            title,
+            crop,
+            quantity,
+            unit,
+            price,
+            city,
+            quality,
+            description
+        })
+        res.status(201).json({success:true,product})
+    } catch (error) {
+        next(error)
+        
+    }
+
+}

@@ -5,6 +5,8 @@ export const notFound = (req, res, next) => {
 };
 
 export const errorHandler = (err, req, res, next) => {
+  console.log(err);
+  
   let status = err.statusCode || 500;
   let message = err.message;
 
