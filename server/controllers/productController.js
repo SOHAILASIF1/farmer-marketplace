@@ -26,3 +26,31 @@ export const createProductSeller=async(req,res,next)=>{
     }
 
 }
+export const getAllProducts=async(req,res,next)=>{
+    try {
+        const products=await productModel.find({status:"active"}).populate("seller","name city").sort({createdAt:-1})
+
+
+        res.status(200).json({success:true,products})
+        
+    } catch (error) {
+        next(error)
+
+        
+    }
+}
+export const getProductById=async(req,res,next)=>{
+    try {
+        const product=await productModel.findById(req.params.id).populate("seller","name city")
+        if (!product) {
+            throw new ApiError(404,"Products not found")
+            
+        }
+
+        res.status(200).json({success:true,product})
+        
+    } catch (error) {
+        next(error)
+        
+    }
+}
