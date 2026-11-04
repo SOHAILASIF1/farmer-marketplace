@@ -55,7 +55,7 @@ export const getProductById=async(req,res,next)=>{
     }
 }
 
-export const getMyProducts=(req,res,next)=>{
+export const getMyProducts=async(req,res,next)=>{
     try {
         const products=await productModel.find({
             seller:req.user._id
