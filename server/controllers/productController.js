@@ -54,3 +54,17 @@ export const getProductById=async(req,res,next)=>{
         
     }
 }
+
+export const getMyProducts=(req,res,next)=>{
+    try {
+        const products=await productModel.find({
+            seller:req.user._id
+        }).sort({createdAt:-1})
+        res.status(200).json({success:true,products})
+        
+    } catch (error) {
+        next(error)
+        
+    }
+
+}
