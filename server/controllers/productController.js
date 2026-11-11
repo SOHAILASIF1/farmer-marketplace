@@ -109,3 +109,22 @@ export const deleteProduct=async(req,res,next)=>{
     }
 
 }
+
+export const markSold=async(req,res,next)=>{
+    try {
+        const product=await productModel.findByIdAndUpdate(
+            {_id:req.params.id,seller:req.user._id},
+            {status:"sold"},
+            {new:true}
+        )
+        if (!product) {
+            throw new ApiError(404,"Product Not Found")
+            
+        }
+        res.status(200).json({success:true,product})
+    } catch (error) {
+        next(error)
+        
+    }
+
+}

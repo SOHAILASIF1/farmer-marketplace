@@ -27,22 +27,40 @@ const MyProducts = () => {
     loadProducts();
   }, []);
   const handleDelete = async (id) => {
-  try {
-    const res = await fetch(`http://localhost:7000/api/product/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const result = await res.json();
+    try {
+      const res = await fetch(`http://localhost:7000/api/product/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const result = await res.json();
 
-    if (res.ok) {
-      setProducts(products.filter((p) => p._id !== id));
-    } else {
-      setMessage(result.message || "Could not delete product");
+      if (res.ok) {
+        setProducts(products.filter((p) => p._id !== id));
+      } else {
+        setMessage(result.message || "Could not delete product");
+      }
+    } catch (error) {
+      setMessage("Server not reachable");
     }
-  } catch (error) {
-    setMessage("Server not reachable");
-  }
-};
+  };
+
+  const handleSold = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:7000/api/product/${id}/sold`, {
+        method: "PATCH",
+        credentials: "include",
+      });
+      const result = await res.json();
+
+      if (res.ok) {
+        setProducts(products.map((p) => (p._id === id ? { ...p, status: "sold" } : p)));
+      } else {
+        setMessage(result.message || "Could not mark as sold");
+      }
+    } catch (error) {
+      setMessage("Server not reachable");
+    }
+  };
 
 
   if (loading) return <p className="p-8 text-center">Loading...</p>;
@@ -68,13 +86,13 @@ const MyProducts = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((p) => (
           <div key={p._id} className="rounded-lg border bg-white p-4 shadow">
-           <Link to={`/products/${p._id}`} className="block">
-    <h3 className="font-semibold hover:text-green-700">{p.title}</h3>
-    <p className="text-sm text-gray-600">{p.crop} | {p.city}</p>
-    <p className="text-sm text-gray-600">{p.quantity} {p.unit}</p>
-    <p className="font-bold text-green-700">Rs {p.price} / {p.unit}</p>
-    <p className="mt-1 text-xs text-gray-500">Status: {p.status}</p>
-  </Link>
+            <Link to={`/products/${p._id}`} className="block">
+              <h3 className="font-semibold hover:text-green-700">{p.title}</h3>
+              <p className="text-sm text-gray-600">{p.crop} | {p.city}</p>
+              <p className="text-sm text-gray-600">{p.quantity} {p.unit}</p>
+              <p className="font-bold text-green-700">Rs {p.price} / {p.unit}</p>
+              <p className="mt-1 text-xs text-gray-500">Status: {p.status}</p>
+            </Link>
 
 
             <div className="mt-3 flex gap-2">
@@ -84,6 +102,15 @@ const MyProducts = () => {
               >
                 Edit
               </Link>
+              {p.status === "active" && (
+                <button
+                  onClick={() => handleSold(p._id)}
+                  className="rounded border border-yellow-500 px-3 py-1 text-sm font-semibold text-yellow-600 hover:bg-yellow-50"
+                >
+                  Mark Sold
+                </button>
+              )}
+
               <button
                 onClick={() => handleDelete(p._id)}
                 className="rounded border border-red-500 px-3 py-1 text-sm font-semibold text-red-500 hover:bg-red-50"
