@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const input =
   "w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-green-600";
@@ -13,8 +14,8 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [message, setMessage] = useState("");
-
+  const [message, setMessage] = useState("") ;
+  const navigate=useNavigate()
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -36,7 +37,12 @@ export default function Signup() {
         body: JSON.stringify(data),
       });
       const result = await res.json();
+      
       setMessage(result.message || "Account created");
+      if (res.ok) {
+        navigate("/login")
+        
+      }
     } catch {
       setMessage("Server not reachable");
     }
