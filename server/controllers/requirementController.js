@@ -1,3 +1,4 @@
+import requirementModel from "../model/requirementModel.js"
 import {ApiError}from "../utils/ApiError.js"
 export const createRequirement=async(req,res,next)=>{
     try {
@@ -7,7 +8,20 @@ export const createRequirement=async(req,res,next)=>{
             
             
         }
+        const requirement=await requirementModel.create({
+            buyer:req.user._id,
+            title,
+            crop,
+            quantity,
+            unit,
+            maxPrice,
+            city,
+            description
+
+        })
+        res.status(200).json({success:true,requirement})
     } catch (error) {
+        next(error)
         
     }
 }
