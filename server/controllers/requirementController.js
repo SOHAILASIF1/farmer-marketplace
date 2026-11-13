@@ -25,3 +25,13 @@ export const createRequirement=async(req,res,next)=>{
         
     }
 }
+export const getAllRequirement=async(req,res,next)=>{
+    try {
+        const requirement=await requirementModel.find({status:"open"}).populate("buyer","name city").sort({createdAt:-1})
+        res.status(200).json({success:true,requirement})
+        
+    } catch (error) {
+        next(error)
+        
+    }
+}
