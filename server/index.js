@@ -10,6 +10,7 @@ import { notFound, errorHandler } from "./middlewares/error.js";
 import authRoutes from "./routes/auth.routes.js";
 import { connectDB } from "./config/db.js"
 import productRoutes from "./routes/productRoutes.js";
+import requirementRoutes from "./routes/requirementRoute.js";
 
 console.log("URI:", process.env.MONGODB_URI);
 
@@ -31,6 +32,7 @@ app.use(morgan("dev"));
 app.use("/api", globalLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
+app.use("/api/requirement",requirementRoutes)
 
 
 app.use(notFound);
